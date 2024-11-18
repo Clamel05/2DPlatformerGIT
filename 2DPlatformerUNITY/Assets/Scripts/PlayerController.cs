@@ -1,7 +1,12 @@
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    Rigidbody rigidPlayer;
+    float speed = 0.01f;
+
     public enum FacingDirection
     {
         left, right
@@ -10,7 +15,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        rigidPlayer = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -25,6 +30,16 @@ public class PlayerController : MonoBehaviour
 
     private void MovementUpdate(Vector2 playerInput)
     {
+        if (Input.GetKey(KeyCode.A))
+        {
+            rigidPlayer.AddForce(speed * Time.deltaTime * transform.right);
+        }
+
+        if (Input.GetKey(KeyCode.D))
+        {
+            rigidPlayer.AddForce(speed * Time.deltaTime * -transform.right);
+        }
+
 
     }
 
