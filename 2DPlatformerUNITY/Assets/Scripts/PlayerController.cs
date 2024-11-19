@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -10,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public enum FacingDirection
     {
         left, right
+
     }
 
     // Start is called before the first frame update
@@ -34,48 +36,33 @@ public class PlayerController : MonoBehaviour
         //My first attempt at task1
         if (Input.GetKey(KeyCode.A))
         {
-            Debug.Log("if");
             playerInput = new Vector2(-1, 0);
             rigidPlayer.AddForce(playerInput * speed);
-            
-            Debug.Log("move");
         }
 
         if (Input.GetKey(KeyCode.D))
         {
-            Debug.Log("if");
             playerInput = new Vector2(1, 0);
             rigidPlayer.AddForce(playerInput * speed);
-            
-            Debug.Log("move");
         }
-
-
-        //2nd attempt at task1
-        /*if(Input.GetKey(KeyCode.A))
-        {
-            Debug.Log("If");
-            playerInput += (speed * Time.deltaTime * Vector2.left);
-            Debug.Log("Move");
-        }
-
-
-        if (Input.GetKey(KeyCode.D))
-        {
-            Debug.Log("If");
-            playerInput += (speed * Time.deltaTime * Vector2.right);
-            Debug.Log("Move");
-        }*/
-
-
 
     }
 
     public bool IsWalking()
     {
 
-        //if()
-        return false;
+        if ((Input.GetKey(KeyCode.A)) || (Input.GetKey(KeyCode.D)))
+        {
+            Debug.Log("WalkingTrue");
+            return true;
+        } 
+        else
+        {
+            Debug.Log("WalkingFalse");
+            return false;
+        }
+
+
     }
     public bool IsGrounded()
     {
