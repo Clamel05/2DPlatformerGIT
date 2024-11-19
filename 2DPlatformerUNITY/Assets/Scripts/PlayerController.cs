@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    Rigidbody rigidPlayer;
-    float speed = 0.01f;
+    Rigidbody2D rigidPlayer;
+    public float speed = 1f;
 
     public enum FacingDirection
     {
@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rigidPlayer = GetComponent<Rigidbody>();
+        rigidPlayer = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -30,21 +30,51 @@ public class PlayerController : MonoBehaviour
 
     private void MovementUpdate(Vector2 playerInput)
     {
+
+        //My first attempt at task1
         if (Input.GetKey(KeyCode.A))
         {
-            rigidPlayer.AddForce(speed * Time.deltaTime * transform.right);
+            Debug.Log("if");
+            playerInput = new Vector2(-1, 0);
+            rigidPlayer.AddForce(playerInput * speed);
+            
+            Debug.Log("move");
         }
 
         if (Input.GetKey(KeyCode.D))
         {
-            rigidPlayer.AddForce(speed * Time.deltaTime * -transform.right);
+            Debug.Log("if");
+            playerInput = new Vector2(1, 0);
+            rigidPlayer.AddForce(playerInput * speed);
+            
+            Debug.Log("move");
         }
+
+
+        //2nd attempt at task1
+        /*if(Input.GetKey(KeyCode.A))
+        {
+            Debug.Log("If");
+            playerInput += (speed * Time.deltaTime * Vector2.left);
+            Debug.Log("Move");
+        }
+
+
+        if (Input.GetKey(KeyCode.D))
+        {
+            Debug.Log("If");
+            playerInput += (speed * Time.deltaTime * Vector2.right);
+            Debug.Log("Move");
+        }*/
+
 
 
     }
 
     public bool IsWalking()
     {
+
+        //if()
         return false;
     }
     public bool IsGrounded()
