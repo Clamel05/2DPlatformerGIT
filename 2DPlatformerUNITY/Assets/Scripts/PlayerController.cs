@@ -7,6 +7,13 @@ public class PlayerController : MonoBehaviour
 {
     Rigidbody2D rigidPlayer;
     public float speed = 1f;
+    [SerializeField] private float groundCheckDistance = 10f;
+    [SerializeField] private LayerMask jumpLayerMask;
+
+    private bool isGrounded = false;
+
+
+    //public FacingDirection GetFacingDirection;
 
     public enum FacingDirection
     {
@@ -23,11 +30,18 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+       /* if (Input.GetKey(KeyCode.A))
+        {
+            GetFacingDirection = GetFacingDirection.Left;
+
+        }*/
+
         // The input from the player needs to be determined and
         // then passed in the to the MovementUpdate which should
         // manage the actual movement of the character.
         Vector2 playerInput = new Vector2();
         MovementUpdate(playerInput);
+
     }
 
     private void MovementUpdate(Vector2 playerInput)
@@ -50,7 +64,7 @@ public class PlayerController : MonoBehaviour
 
     public bool IsWalking()
     {
-
+        /*
         if ((Input.GetKey(KeyCode.A)) || (Input.GetKey(KeyCode.D)))
         {
             Debug.Log("WalkingTrue");
@@ -61,12 +75,24 @@ public class PlayerController : MonoBehaviour
             Debug.Log("WalkingFalse");
             return false;
         }
-
-
+        */
+        return false;
     }
     public bool IsGrounded()
     {
-        return false;
+
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, jumpLayerMask);
+        Debug.DrawRay(transform.position, Vector2.down * groundCheckDistance, Color.red);
+
+        if (isGrounded = hitInfo.collider != null)
+        {
+            print(hitInfo.collider.name);
+            Debug.DrawLine(transform.position, hitInfo.point, Color.green);
+            return false;
+        }
+        else
+            return true;
+
     }
 
     public FacingDirection GetFacingDirection()
