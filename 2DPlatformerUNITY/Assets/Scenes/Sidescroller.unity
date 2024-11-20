@@ -1696,7 +1696,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
-  groundCheckDistance: 2
+  groundCheckDistance: 1
   jumpLayerMask:
     serializedVersion: 2
     m_Bits: 0

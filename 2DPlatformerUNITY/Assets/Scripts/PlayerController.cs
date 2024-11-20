@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     Rigidbody2D rigidPlayer;
     public float speed = 1f;
-    [SerializeField] private float groundCheckDistance = 10f;
+    [SerializeField] private float groundCheckDistance = 1f;
     [SerializeField] private LayerMask jumpLayerMask;
 
     private bool isGrounded = false;
