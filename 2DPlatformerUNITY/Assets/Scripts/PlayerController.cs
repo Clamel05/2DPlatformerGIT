@@ -7,10 +7,12 @@ public class PlayerController : MonoBehaviour
 {
     Rigidbody2D rigidPlayer;
     public float speed = 1f;
-    [SerializeField] private float groundCheckDistance = 1f;
+    [SerializeField] private float groundCheckDistance = 0.5f;
     [SerializeField] private LayerMask jumpLayerMask;
 
     private bool isGrounded = false;
+
+    public float maxHeight = 5f;
 
 
     //public FacingDirection GetFacingDirection;
@@ -24,6 +26,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (rigidPlayer == null)
         rigidPlayer = GetComponent<Rigidbody2D>();
     }
 
@@ -60,6 +63,17 @@ public class PlayerController : MonoBehaviour
             rigidPlayer.AddForce(playerInput * speed);
         }
 
+        //Jumping - Task 1 Journal 7
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            playerInput = new Vector2(0, 1);
+            rigidPlayer.AddForce(playerInput * maxHeight);
+            Debug.Log("Jump");
+        }
+
+
+
+        
     }
 
     public bool IsWalking()
@@ -81,17 +95,22 @@ public class PlayerController : MonoBehaviour
     public bool IsGrounded()
     {
 
-        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, jumpLayerMask);
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance);
         Debug.DrawRay(transform.position, Vector2.down * groundCheckDistance, Color.red);
 
         if (isGrounded = hitInfo.collider != null)
         {
             print(hitInfo.collider.name);
             Debug.DrawLine(transform.position, hitInfo.point, Color.green);
+            Debug.Log("False");
             return false;
         }
         else
+        {
+            Debug.Log("True");
             return true;
+        }
+            
 
     }
 
