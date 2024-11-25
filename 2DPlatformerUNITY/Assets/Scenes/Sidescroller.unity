@@ -1700,6 +1700,7 @@ MonoBehaviour:
   jumpLayerMask:
     serializedVersion: 2
     m_Bits: 0
+  maxHeight: 2
 --- !u!4 &1433354315
 Transform:
   m_ObjectHideFlags: 0
@@ -1853,10 +1854,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  groundCheckDistance: 2
+  groundCheckDistance: 1
   jumpLayerMask:
     serializedVersion: 2
     m_Bits: 0
+  maxHeight: 5
 --- !u!1 &1598075209
 GameObject:
   m_ObjectHideFlags: 0
