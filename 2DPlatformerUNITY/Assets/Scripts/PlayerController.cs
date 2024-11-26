@@ -11,22 +11,39 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody2D body;
     Rigidbody2D rigidPlayer;
 
-    public float maxSpeed = 10f;
-    public float accelerationTime = 0.25f;
-    public float deccelerationTime = 0.15f;
-
-    public float accelerationRate;
-    public float deccelerationRate;
-
     [SerializeField] private float groundCheckDistance = 1f;
     [SerializeField] private LayerMask jumpLayerMask;
     //[SerializeField] private ForceMode2D forceMode;
 
-    private bool isGrounded = true;
+
+    [Header("Horizontal")]
+    public float maxSpeed = 10f;
+    public float accelerationTime = 0.25f;
+    public float deccelerationTime = 0.15f;
+
+    
+
+    
+
+    [Header("Vertical")]
+    public float apexHeight = 3f;
+    public float apexTime = 0.5f;
+
+    [Header("Ground Checking")]
+    public float groundCheckOffset = 0.5f;
+    public Vector2 groundCheckSize = new(0.4f, 0.1f);
+    public LayerMask groundCheckMask;
+
+
+    public float accelerationRate;
+    public float deccelerationRate;
+
+    private float gravity;
+    private float initialJumpSpeed;
+
+    private bool isGrounded = false;
 
     public float maxHeight = 5f;
-
-
     public enum FacingDirection
     {
         left, right
@@ -53,23 +70,33 @@ public class PlayerController : MonoBehaviour
         accelerationRate = maxSpeed / accelerationTime;
         deccelerationRate = maxSpeed / deccelerationTime;
 
+        gravity = -2 * apexHeight / (apexTime * apexTime);
+        initialJumpSpeed = 2 * apexHeight / apexTime;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-       /* if (Input.GetKey(KeyCode.A))
-        {
-            GetFacingDirection = GetFacingDirection.Left;
+        /* if (Input.GetKey(KeyCode.A))
+         {
+             GetFacingDirection = GetFacingDirection.Left;
 
-        }*/
+         }*/
 
-        // The input from the player needs to be determined and
-        // then passed in the to the MovementUpdate which should
-        // manage the actual movement of the character.
+        CheckForGround();
+
         Vector2 playerInput = new Vector2();
         playerInput.x = Input.GetAxisRaw("Horizontal");  //Prof way of doing this
         MovementUpdate(playerInput);
+        JumpUpdate();
+
+        if (!isGrounded)
+        velocity.y += gravity * Time.deltaTime;
+        else
+            velocity.y = 0;
+
+
 
         body.velocity = velocity;
 
@@ -102,8 +129,6 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-
-
         //My first attempt at task1
         /*if (Input.GetKey(KeyCode.A))
         {
@@ -128,6 +153,32 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    private void JumpUpdate()
+    {
+        if (isGrounded && Input.GetButton("Jump"))
+        {
+            velocity.y = initialJumpSpeed;
+            isGrounded = false;
+        }
+    }
+
+    private void CheckForGround()
+    {
+        isGrounded = Physics2D.OverlapBox(
+            transform.position + Vector3.down * groundCheckOffset, groundCheckSize, 0, groundCheckMask);
+    }
+
+    private void DebugDrawGroundCheck()
+    {
+        Vector3 p1 = transform.position + Vector3.down * groundCheckOffset + new Vector3(groundCheckSize.x / 2, groundCheckSize.y / 2);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireCube(transform.position + Vector3.down * groundCheckOffset, groundCheckSize);
+    }
+
+
     public bool IsWalking()
     {
         return velocity.x != 0;
@@ -149,8 +200,13 @@ public class PlayerController : MonoBehaviour
     }
     public bool IsGrounded()
     {
-
-        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, jumpLayerMask);
+        //Prof way of doing this
+        return isGrounded;
+        
+        
+        
+        //My attempt
+        /*RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, jumpLayerMask);
         Debug.DrawRay(transform.position, Vector2.down * groundCheckDistance, Color.red);
 
         if (isGrounded = hitInfo.collider != null)
@@ -163,7 +219,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("False");
             return false;
-        }
+        }*/
             
     }
 
