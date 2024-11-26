@@ -7,8 +7,9 @@ public class PlayerController : MonoBehaviour
 {
     Rigidbody2D rigidPlayer;
     public float speed = 1f;
-    [SerializeField] private float groundCheckDistance = 0.5f;
+    [SerializeField] private float groundCheckDistance = 1f;
     [SerializeField] private LayerMask jumpLayerMask;
+    //[SerializeField] private ForceMode2D forceMode;
 
     private bool isGrounded = false;
 
@@ -67,11 +68,9 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             playerInput = new Vector2(0, 1);
-            rigidPlayer.AddForce(playerInput * maxHeight);
+            rigidPlayer.AddForce(playerInput * maxHeight * Time.deltaTime);
             Debug.Log("Jump");
         }
-
-
 
         
     }
@@ -95,7 +94,7 @@ public class PlayerController : MonoBehaviour
     public bool IsGrounded()
     {
 
-        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance);
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, jumpLayerMask);
         Debug.DrawRay(transform.position, Vector2.down * groundCheckDistance, Color.red);
 
         if (isGrounded = hitInfo.collider != null)
