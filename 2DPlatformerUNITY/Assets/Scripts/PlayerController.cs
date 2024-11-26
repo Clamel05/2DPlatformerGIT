@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             playerInput = new Vector2(0, 1);
-            rigidPlayer.AddForce(playerInput * maxHeight * Time.deltaTime);
+            rigidPlayer.AddForce(playerInput * maxHeight);
             Debug.Log("Jump");
         }
 
