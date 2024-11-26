@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody2D body;
     Rigidbody2D rigidPlayer;
 
-    public float maxSpeed = 20f;
+    public float maxSpeed = 10f;
     public float accelerationTime = 0.25f;
     public float deccelerationTime = 0.15f;
 
@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask jumpLayerMask;
     //[SerializeField] private ForceMode2D forceMode;
 
-    private bool isGrounded = false;
+    private bool isGrounded = true;
 
     public float maxHeight = 5f;
 
@@ -155,18 +155,16 @@ public class PlayerController : MonoBehaviour
 
         if (isGrounded = hitInfo.collider != null)
         {
-            print(hitInfo.collider.name);
             Debug.DrawLine(transform.position, hitInfo.point, Color.green);
-            Debug.Log("False");
-            return false;
-        }
-        else
-        {
             Debug.Log("True");
             return true;
         }
+        else
+        {
+            Debug.Log("False");
+            return false;
+        }
             
-
     }
 
     public FacingDirection GetFacingDirection()
