@@ -15,6 +15,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask jumpLayerMask;
     //[SerializeField] private ForceMode2D forceMode;
 
+    private PlayerDirection currentDirrection = PlayerDirection.right;
+    public PlayerState currentState = PlayerState.idle;
+    public PlayerState previousState = PlayerState.idle;
+
 
     [Header("Horizontal")]
     public float maxSpeed = 10f;
@@ -39,15 +43,22 @@ public class PlayerController : MonoBehaviour
     public float deccelerationRate;
 
     private float gravity;
-    private float initialJumpSpeed;
+    private float initialJumpSpeed; 
+
 
     private bool isGrounded = false;
+    private bool isDead = false;
 
     public float maxHeight = 5f;
-    public enum FacingDirection
+    public enum PlayerDirection
     {
         left, right
 
+    }
+
+    public enum PlayerState
+    {
+        idle, walking, jumping, dead
     }
 
 
@@ -55,7 +66,7 @@ public class PlayerController : MonoBehaviour
 
 
 
-    private FacingDirection currentDirection = FacingDirection.right;
+    private PlayerDirection currentDirection = PlayerDirection.right;
 
     private Vector2 velocity;
 
@@ -84,12 +95,45 @@ public class PlayerController : MonoBehaviour
 
          }*/
 
+        previousState = currentState;
+
+
         CheckForGround();
 
         Vector2 playerInput = new Vector2();
         playerInput.x = Input.GetAxisRaw("Horizontal");  //Prof way of doing this
+
+        if (isDead)
+        {
+            currentState = PlayerState.dead;
+        }
+
+        switch (currentState)
+        {
+            case PlayerState.dead:
+                break;
+            case PlayerState.idle:
+                if (!isGrounded) currentState = PlayerState.jumping;
+                else if (velocity.x != 0) currentState = PlayerState.walking;
+                break;
+            case PlayerState.walking:
+                if (!isGrounded) currentState = PlayerState.jumping;
+                else if (velocity.x == 0) currentState = PlayerState.idle;
+                break;
+            case PlayerState.jumping:
+                if(isGrounded)
+                {
+                    if (velocity.x != 0) currentState = PlayerState.walking;
+                    else currentState = PlayerState.idle;
+                }
+                break;
+        }
+
+
         MovementUpdate(playerInput);
         JumpUpdate();
+
+
 
         if (!isGrounded)
         velocity.y += gravity * Time.deltaTime;
@@ -106,9 +150,9 @@ public class PlayerController : MonoBehaviour
     {
         //Prof way
         if (playerInput.x < 0)
-            currentDirection = FacingDirection.left;
+            currentDirection = PlayerDirection.left;
         else if (playerInput.x > 0)
-            currentDirection = FacingDirection.right;
+            currentDirection = PlayerDirection.right;
 
         if(playerInput.x != 0)
         {
@@ -223,7 +267,7 @@ public class PlayerController : MonoBehaviour
             
     }
 
-    public FacingDirection GetFacingDirection()
+    public PlayerDirection GetFacingDirection()
     {
         return currentDirection;
     }

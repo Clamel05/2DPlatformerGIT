@@ -6,22 +6,46 @@ public class PlayerVisuals : MonoBehaviour
     public SpriteRenderer bodyRenderer;
     public PlayerController playerController;
 
-    private readonly int isWalkingHash = Animator.StringToHash("IsWalking");
-    private readonly int isGroundedHash = Animator.StringToHash("IsGrounded");
+    private readonly int IdleHash = Animator.StringToHash("Idle");
+    private readonly int WalkingHash = Animator.StringToHash("Walking");
+    private readonly int JumpingHash = Animator.StringToHash("Jumping");
+    private readonly int DeadHash = Animator.StringToHash("Dead");
 
     void Update()
     {
-        animator.SetBool(isWalkingHash, playerController.IsWalking());
-        animator.SetBool(isGroundedHash, playerController.IsGrounded());
+        UpdateVisuals();
 
         switch (playerController.GetFacingDirection())
         {
-            case PlayerController.FacingDirection.left:
+            case PlayerController.PlayerDirection.left:
                 bodyRenderer.flipX = true;
                 break;
-            case PlayerController.FacingDirection.right:
+            case PlayerController.PlayerDirection.right:
                 bodyRenderer.flipX = false;
                 break;
         }
     }
+
+    private void UpdateVisuals()
+    {
+        if (playerController.previousState != playerController.currentState)
+        {
+            switch (playerController.currentState)
+            {
+                case PlayerController.PlayerState.idle:
+                    animator.CrossFade(IdleHash, 0);
+                    break;
+                case PlayerController.PlayerState.walking:
+                    animator.CrossFade(WalkingHash, 0);
+                    break;
+                case PlayerController.PlayerState.jumping:
+                    animator.CrossFade(JumpingHash, 0);
+                    break;
+                case PlayerController.PlayerState.dead:
+                    animator.CrossFade(DeadHash, 0);
+                    break;
+            }
+        }
+    }
+
 }
