@@ -38,6 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1690,7 +1691,7 @@ Transform:
   m_GameObject: {fileID: 1433354312}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.53, y: 0.55, z: 0}
+  m_LocalPosition: {x: 3.53, y: -2.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1834,23 +1835,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   body: {fileID: 1433354318}
-  groundCheckDistance: 1
-  jumpLayerMask:
-    serializedVersion: 2
-    m_Bits: 1
+  currentState: 0
+  previousState: 0
   maxSpeed: 8
   accelerationTime: 0.25
   deccelerationTime: 0.15
   apexHeight: 3.5
   apexTime: 0.5
+  terminalSpeed: 5
+  fallAcceleration: 0.2
   groundCheckOffset: 0.65
-  groundCheckSize: {x: 0.8, y: 0.1}
+  groundCheckSize: {x: 0.6, y: 0.1}
   groundCheckMask:
     serializedVersion: 2
     m_Bits: 8
   accelerationRate: 0
   deccelerationRate: 0
-  maxHeight: 5
 --- !u!1 &1598075209
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,9 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody2D body;
     Rigidbody2D rigidPlayer;
 
-    [SerializeField] private float groundCheckDistance = 1f;
-    [SerializeField] private LayerMask jumpLayerMask;
-    //[SerializeField] private ForceMode2D forceMode;
+    //[SerializeField] private float groundCheckDistance = 1f;
 
     private PlayerDirection currentDirrection = PlayerDirection.right;
     public PlayerState currentState = PlayerState.idle;
@@ -25,13 +23,11 @@ public class PlayerController : MonoBehaviour
     public float accelerationTime = 0.25f;
     public float deccelerationTime = 0.15f;
 
-    
-
-    
-
     [Header("Vertical")]
     public float apexHeight = 3f;
     public float apexTime = 0.5f;
+    public float terminalSpeed = 5f;
+    public float fallAcceleration = 1f;
 
     [Header("Ground Checking")]
     public float groundCheckOffset = 0.5f;
@@ -49,11 +45,9 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded = false;
     private bool isDead = false;
 
-    public float maxHeight = 5f;
     public enum PlayerDirection
     {
         left, right
-
     }
 
     public enum PlayerState
@@ -63,7 +57,6 @@ public class PlayerController : MonoBehaviour
 
 
     //public FacingDirection GetFacingDirection;
-
 
 
     private PlayerDirection currentDirection = PlayerDirection.right;
@@ -173,6 +166,12 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+
+
+
+
+
+
         //My first attempt at task1
         /*if (Input.GetKey(KeyCode.A))
         {
@@ -203,7 +202,26 @@ public class PlayerController : MonoBehaviour
         {
             velocity.y = initialJumpSpeed;
             isGrounded = false;
+
         }
+
+        if(isGrounded == false)
+        {
+            if (velocity.y == 0 && velocity.y < terminalSpeed)
+            {
+                velocity.y += fallAcceleration * Time.deltaTime;
+            }
+        }
+        
+
+           //coyote time attempt
+           /* for(float i = 0; i < 1; i = (i + 1) * Time.deltaTime)
+            {
+                isGrounded = true;
+            }*/
+
+
+
     }
 
     private void CheckForGround()
