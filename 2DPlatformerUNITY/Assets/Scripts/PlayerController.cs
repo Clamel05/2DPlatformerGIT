@@ -34,6 +34,12 @@ public class PlayerController : MonoBehaviour
     public Vector2 groundCheckSize = new(0.4f, 0.1f);
     public LayerMask groundCheckMask;
 
+    [Header("Dash Check")]
+    public float dashCheckOffset = 0.5f;
+    public Vector2 dashCheckSize = new(0.5f, 1.0f);
+    public LayerMask dashCheckMask;
+
+    public float dashSpeed = 5.0f;
 
     private float accelerationRate;
     private float decelerationRate;
@@ -43,6 +49,7 @@ public class PlayerController : MonoBehaviour
 
     private bool isGrounded = false;
     public bool isDead = false;
+    private bool isDashing = false;
 
     private Vector2 velocity;
 
@@ -63,7 +70,7 @@ public class PlayerController : MonoBehaviour
     {
         previousState = currentState;
 
-        CheckForGround();
+        CheckForContact();
 
         Vector2 playerInput = new Vector2();
         playerInput.x = Input.GetAxisRaw("Horizontal");
@@ -97,6 +104,7 @@ public class PlayerController : MonoBehaviour
 
         MovementUpdate(playerInput);
         JumpUpdate();
+        DashUpdate();
 
         if (!isGrounded)
             velocity.y += gravity * Time.deltaTime;
@@ -144,20 +152,34 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
-    private void CheckForGround()
+    private void DashUpdate()
     {
-        isGrounded = Physics2D.OverlapBox(
-            transform.position + Vector3.down * groundCheckOffset,
-            groundCheckSize,
-            0,
-            groundCheckMask);
+        if(isDashing && Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            //dash left
+            velocity.x = dashSpeed;
+            isDashing = true;
+        }
+
+    }
+
+
+    private void CheckForContact()
+    {
+        isGrounded = Physics2D.OverlapBox(transform.position + Vector3.down * groundCheckOffset, groundCheckSize, 0, groundCheckMask);
+
+        isDashing = Physics2D.OverlapBox(transform.position + Vector3.right * dashCheckOffset, dashCheckSize, 0, dashCheckMask);
+        isDashing = Physics2D.OverlapBox(transform.position + Vector3.left * dashCheckOffset, dashCheckSize, 0, dashCheckMask);
     }
 
 
     public void OnDrawGizmos()
     {
+        //Ground
         Gizmos.DrawWireCube(transform.position + Vector3.down * groundCheckOffset, groundCheckSize);
+        //Dash
+        Gizmos.DrawWireCube(transform.position + Vector3.left * dashCheckOffset, dashCheckSize);
+
     }
 
 
@@ -170,6 +192,11 @@ public class PlayerController : MonoBehaviour
     public bool IsGrounded()
     {
         return isGrounded;
+    }
+
+    public bool IsDashing()
+    {
+        return isDashing;
     }
 
 
