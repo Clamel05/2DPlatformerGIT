@@ -40,7 +40,8 @@ public class PlayerController : MonoBehaviour
     public Vector2 dashCheckSize = new(0.5f, 1.0f);
     public LayerMask dashCheckMask;
 
-    public float dashSpeed = 10.0f;
+    public float dashSpeedLeft = -10f;
+    public float dashSpeedRight = 10f;
 
     private float accelerationRate;
     private float decelerationRate;
@@ -157,13 +158,21 @@ public class PlayerController : MonoBehaviour
 
     private void DashUpdate()
     {
-        if (isDashing == false && Input.GetKey(KeyCode.LeftShift))
+        if (!isDashing && Input.GetKeyDown(KeyCode.LeftShift)) //NOT WORKING: Gravity, always move to the right - speed whan facing left/right works though.
         {
-            transform.position = Time.deltaTime * dashSpeed * Vector3.left;
-            //gravity = 0;
-            //isDashing = false;
             body.gravityScale = 0;
-            isDashing = true;
+
+            if (currentDirection == PlayerDirection.left)
+            {
+                velocity.x = dashSpeedLeft;
+
+            }
+
+            if (currentDirection == PlayerDirection.right)
+            {
+                velocity.x = dashSpeedRight;
+            }
+            
         }
         else if (isDashing)
         {
