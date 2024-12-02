@@ -157,19 +157,20 @@ public class PlayerController : MonoBehaviour
 
     private void DashUpdate()
     {
-        if(!isDashing && Input.GetKey(KeyCode.LeftShift))
+        if (isDashing == false && Input.GetKey(KeyCode.LeftShift))
         {
-            transform.position =  Time.deltaTime * dashSpeed * Vector3.left;
+            transform.position = Time.deltaTime * dashSpeed * Vector3.left;
             //gravity = 0;
             //isDashing = false;
             body.gravityScale = 0;
-
-            if (isDashing)
-            {
-                isDashing = false;
-                body.gravityScale = 1;
-            }
+            isDashing = true;
         }
+        else if (isDashing)
+        {
+            isDashing = false;
+            body.gravityScale = 1;
+        }
+        
 
     }
 
