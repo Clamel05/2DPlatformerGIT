@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     public PlayerState currentState = PlayerState.idle;
     public PlayerState previousState = PlayerState.idle;
 
+    
 
     [Header("Horizontal")]
     public float maxSpeed = 5f;
@@ -39,7 +40,7 @@ public class PlayerController : MonoBehaviour
     public Vector2 dashCheckSize = new(0.5f, 1.0f);
     public LayerMask dashCheckMask;
 
-    public float dashSpeed = 5.0f;
+    public float dashSpeed = 10.0f;
 
     private float accelerationRate;
     private float decelerationRate;
@@ -63,6 +64,8 @@ public class PlayerController : MonoBehaviour
 
         gravity = -2 * apexHeight / (apexTime * apexTime);
         initialJumpSpeed = 2 * apexHeight / apexTime;
+
+        body.gravityScale = 1;
     }
 
 
@@ -154,11 +157,18 @@ public class PlayerController : MonoBehaviour
 
     private void DashUpdate()
     {
-        if(isDashing && Input.GetKeyDown(KeyCode.LeftShift))
+        if(!isDashing && Input.GetKey(KeyCode.LeftShift))
         {
-            //dash left
-            velocity.x = dashSpeed;
-            isDashing = true;
+            transform.position =  Time.deltaTime * dashSpeed * Vector3.left;
+            //gravity = 0;
+            //isDashing = false;
+            body.gravityScale = 0;
+
+            if (isDashing)
+            {
+                isDashing = false;
+                body.gravityScale = 1;
+            }
         }
 
     }
