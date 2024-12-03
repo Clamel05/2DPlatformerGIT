@@ -157,16 +157,27 @@ public class PlayerController : MonoBehaviour
 
     private void JumpUpdate()
     {
-        if (isGrounded && Input.GetButton("Jump"))
+       
+        if (Input.GetKeyDown(KeyCode.LeftControl) && isGrounded)
         {
+            initialJumpSpeed++;
+            Debug.Log("Jump" + initialJumpSpeed);
+        }
+
+
+        if (isGrounded && Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("Space");
             velocity.y = initialJumpSpeed;
             isGrounded = false;
+            initialJumpSpeed = 2 * apexHeight / apexTime;
         }
+
     }
 
     private void DashUpdate()
     {
-        if (!isDashing && Input.GetKeyDown(KeyCode.LeftShift)) //NOT WORKING: Gravity, always move to the right - speed whan facing left/right works though.
+        if (!isDashing && Input.GetKeyDown(KeyCode.LeftShift))
         {
 
             if (currentDirection == PlayerDirection.left)
