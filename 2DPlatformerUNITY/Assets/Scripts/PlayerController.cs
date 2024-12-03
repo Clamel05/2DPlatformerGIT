@@ -73,8 +73,6 @@ public class PlayerController : MonoBehaviour
 
         gravity = -2 * apexHeight / (apexTime * apexTime);
         initialJumpSpeed = 2 * apexHeight / apexTime;
-
-        body.gravityScale = 1;
     }
 
 
@@ -117,6 +115,7 @@ public class PlayerController : MonoBehaviour
         MovementUpdate(playerInput);
         JumpUpdate();
         DashUpdate();
+        Gravity();
 
         if (!isGrounded)
             velocity.y += gravity * Time.deltaTime;
@@ -221,6 +220,19 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawWireCube(transform.position + Vector3.right * dashCheckOffsetR, dashCheckSizeR);
 
     }
+
+
+    public void Gravity()
+    {
+        if(Input.GetKeyDown(KeyCode.W))
+        gravity += 1;
+
+        if (Input.GetKeyDown(KeyCode.S))
+            gravity -= 1;
+
+        Debug.Log("Gravity" + gravity);
+    }
+
 
 
     public bool IsWalking()
