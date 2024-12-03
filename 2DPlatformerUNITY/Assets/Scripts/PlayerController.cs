@@ -47,7 +47,7 @@ public class PlayerController : MonoBehaviour
     public LayerMask dashCheckMaskL;
 
 
-
+    [Header("Others")]
     public float dashSpeedLeft = -10f;
     public float dashSpeedRight = 10f;
 
@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
     private float decelerationRate;
 
     [SerializeField] private float gravity;
-    private float initialJumpSpeed;
+    [SerializeField] private float initialJumpSpeed;
 
     private bool isGrounded = false;
     public bool isDead = false;
@@ -238,17 +238,17 @@ public class PlayerController : MonoBehaviour
 
     public void Gravity()
     {
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetKey(KeyCode.W))
         {
-            gravity += 1;
+            gravity += 5 * Time.fixedDeltaTime;
             Debug.Log("Gravity" + gravity);
 
         }
 
 
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKey(KeyCode.S))
         {
-            gravity -= 1;
+            gravity -= 5 * Time.fixedDeltaTime;
             Debug.Log("Gravity" + gravity);
         }
 

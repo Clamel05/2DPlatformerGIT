@@ -2321,6 +2321,7 @@ MonoBehaviour:
   dashSpeedLeft: -10
   dashSpeedRight: 10
   gravity: 0
+  initialJumpSpeed: 0
   isDead: 0
 --- !u!4 &1433354315
 Transform:
