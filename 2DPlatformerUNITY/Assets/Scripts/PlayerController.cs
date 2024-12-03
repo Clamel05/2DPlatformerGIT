@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     public PlayerState currentState = PlayerState.idle;
     public PlayerState previousState = PlayerState.idle;
 
-    
+
 
     [Header("Horizontal")]
     public float maxSpeed = 5f;
@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
     private float accelerationRate;
     private float decelerationRate;
 
-    private float gravity;
+    [SerializeField] private float gravity;
     private float initialJumpSpeed;
 
     private bool isGrounded = false;
@@ -62,6 +62,7 @@ public class PlayerController : MonoBehaviour
     private bool isDashing = false;
 
     private Vector2 velocity;
+    private Vector2 playerInput;
 
 
     public void Start()
@@ -75,22 +76,46 @@ public class PlayerController : MonoBehaviour
         initialJumpSpeed = 2 * apexHeight / apexTime;
     }
 
-
     public void Update()
     {
+        playerInput.x = Input.GetAxisRaw("Horizontal");
+        if (Input.GetButtonDown("Jump"))
+        {
+            playerInput.y = 1;
+            print("jumpasd");
+        }
+    }
+
+
+    public void FixedUpdate()
+    {
+        //d transform.Rotate(0, 0, 0);  
         previousState = currentState;
 
         CheckForContact();
+        UpdateCurrentState();
 
-        Vector2 playerInput = new Vector2();
-        playerInput.x = Input.GetAxisRaw("Horizontal");
+        MovementUpdate();
+        JumpUpdate();
+        DashUpdate();
+        Gravity();
 
+        if (!isGrounded)
+            velocity.y += gravity * Time.deltaTime;
+        else
+            velocity.y = 0;
+
+        body.velocity = velocity;
+    }
+
+    private void UpdateCurrentState()
+    {
         if (isDead)
         {
             currentState = PlayerState.dead;
         }
 
-        switch(currentState)
+        switch (currentState)
         {
             case PlayerState.dead:
                 // do nothing - we ded.
@@ -111,22 +136,9 @@ public class PlayerController : MonoBehaviour
                 }
                 break;
         }
-
-        MovementUpdate(playerInput);
-        JumpUpdate();
-        DashUpdate();
-        Gravity();
-
-        if (!isGrounded)
-            velocity.y += gravity * Time.deltaTime;
-        else
-            velocity.y = 0;
-
-        body.velocity = velocity;
     }
 
-
-    private void MovementUpdate(Vector2 playerInput)
+    private void MovementUpdate()
     {
         if (playerInput.x < 0)
             currentDirection = PlayerDirection.left;
@@ -156,20 +168,21 @@ public class PlayerController : MonoBehaviour
 
     private void JumpUpdate()
     {
-       
-        if (Input.GetKeyDown(KeyCode.LeftControl) && isGrounded)
+
+        if (Input.GetKey(KeyCode.LeftControl) && isGrounded)
         {
-            initialJumpSpeed++;
+            initialJumpSpeed += 5 * Time.fixedDeltaTime;
             Debug.Log("Jump" + initialJumpSpeed);
         }
 
 
-        if (isGrounded && Input.GetKeyDown(KeyCode.Space))
+        if (isGrounded && playerInput.y == 1)
         {
             Debug.Log("Space");
             velocity.y = initialJumpSpeed;
             isGrounded = false;
             initialJumpSpeed = 2 * apexHeight / apexTime;
+            playerInput.y = 0;
         }
 
     }
@@ -183,21 +196,22 @@ public class PlayerController : MonoBehaviour
             {
                 body.constraints = RigidbodyConstraints2D.FreezePositionY;
                 velocity.x = dashSpeedLeft;
-
             }
 
             if (currentDirection == PlayerDirection.right)
             {
+                body.constraints = RigidbodyConstraints2D.FreezePositionY;
                 velocity.x = dashSpeedRight;
             }
-            
+
         }
         else if (isDashing)
         {
             isDashing = false;
             body.constraints = RigidbodyConstraints2D.None;
+            body.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
-        
+
 
     }
 
@@ -206,7 +220,7 @@ public class PlayerController : MonoBehaviour
     {
         isGrounded = Physics2D.OverlapBox(transform.position + Vector3.down * groundCheckOffset, groundCheckSize, 0, groundCheckMask);
 
-        isDashing = Physics2D.OverlapBox(transform.position + Vector3.right * dashCheckOffsetR, dashCheckSizeR, 0, dashCheckMaskR);
+        //isDashing = Physics2D.OverlapBox(transform.position + Vector3.right * dashCheckOffsetR, dashCheckSizeR, 0, dashCheckMaskR);
         isDashing = Physics2D.OverlapBox(transform.position + Vector3.left * dashCheckOffsetL, dashCheckSizeL, 0, dashCheckMaskL);
     }
 
@@ -217,20 +231,29 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawWireCube(transform.position + Vector3.down * groundCheckOffset, groundCheckSize);
         //Dash
         Gizmos.DrawWireCube(transform.position + Vector3.left * dashCheckOffsetL, dashCheckSizeL);
-        Gizmos.DrawWireCube(transform.position + Vector3.right * dashCheckOffsetR, dashCheckSizeR);
+        //Gizmos.DrawWireCube(transform.position + Vector3.right * dashCheckOffsetR, dashCheckSizeR);
 
     }
 
 
     public void Gravity()
     {
-        if(Input.GetKeyDown(KeyCode.W))
-        gravity += 1;
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            gravity += 1;
+            Debug.Log("Gravity" + gravity);
 
-        if (Input.GetKeyDown(KeyCode.S))
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.X))
+        {
             gravity -= 1;
+            Debug.Log("Gravity" + gravity);
+        }
 
-        Debug.Log("Gravity" + gravity);
+
+
     }
 
 
