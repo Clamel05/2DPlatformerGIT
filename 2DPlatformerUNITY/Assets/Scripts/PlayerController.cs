@@ -35,10 +35,18 @@ public class PlayerController : MonoBehaviour
     public Vector2 groundCheckSize = new(0.4f, 0.1f);
     public LayerMask groundCheckMask;
 
-    [Header("Dash Check")]
-    public float dashCheckOffset = 0.5f;
-    public Vector2 dashCheckSize = new(0.5f, 1.0f);
-    public LayerMask dashCheckMask;
+    [Header("Dash CheckR")]
+    public float dashCheckOffsetR = 0.5f;
+    public Vector2 dashCheckSizeR = new(0.5f, 1.0f);
+    public LayerMask dashCheckMaskR;
+
+
+    [Header("Dash CheckL")]
+    public float dashCheckOffsetL = 0.5f;
+    public Vector2 dashCheckSizeL = new(0.5f, 1.0f);
+    public LayerMask dashCheckMaskL;
+
+
 
     public float dashSpeedLeft = -10f;
     public float dashSpeedRight = 10f;
@@ -160,10 +168,10 @@ public class PlayerController : MonoBehaviour
     {
         if (!isDashing && Input.GetKeyDown(KeyCode.LeftShift)) //NOT WORKING: Gravity, always move to the right - speed whan facing left/right works though.
         {
-            body.gravityScale = 0;
 
             if (currentDirection == PlayerDirection.left)
             {
+                body.constraints = RigidbodyConstraints2D.FreezePositionY;
                 velocity.x = dashSpeedLeft;
 
             }
@@ -177,7 +185,7 @@ public class PlayerController : MonoBehaviour
         else if (isDashing)
         {
             isDashing = false;
-            body.gravityScale = 1;
+            body.constraints = RigidbodyConstraints2D.None;
         }
         
 
@@ -188,8 +196,8 @@ public class PlayerController : MonoBehaviour
     {
         isGrounded = Physics2D.OverlapBox(transform.position + Vector3.down * groundCheckOffset, groundCheckSize, 0, groundCheckMask);
 
-        isDashing = Physics2D.OverlapBox(transform.position + Vector3.right * dashCheckOffset, dashCheckSize, 0, dashCheckMask);
-        isDashing = Physics2D.OverlapBox(transform.position + Vector3.left * dashCheckOffset, dashCheckSize, 0, dashCheckMask);
+        isDashing = Physics2D.OverlapBox(transform.position + Vector3.right * dashCheckOffsetR, dashCheckSizeR, 0, dashCheckMaskR);
+        isDashing = Physics2D.OverlapBox(transform.position + Vector3.left * dashCheckOffsetL, dashCheckSizeL, 0, dashCheckMaskL);
     }
 
 
@@ -198,7 +206,8 @@ public class PlayerController : MonoBehaviour
         //Ground
         Gizmos.DrawWireCube(transform.position + Vector3.down * groundCheckOffset, groundCheckSize);
         //Dash
-        Gizmos.DrawWireCube(transform.position + Vector3.left * dashCheckOffset, dashCheckSize);
+        Gizmos.DrawWireCube(transform.position + Vector3.left * dashCheckOffsetL, dashCheckSizeL);
+        Gizmos.DrawWireCube(transform.position + Vector3.right * dashCheckOffsetR, dashCheckSizeR);
 
     }
 
