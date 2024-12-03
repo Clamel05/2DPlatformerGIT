@@ -189,7 +189,7 @@ public class PlayerController : MonoBehaviour
 
     private void DashUpdate()
     {
-        if (!isDashing && Input.GetKeyDown(KeyCode.LeftShift))
+        if (!isDashing && Input.GetKey(KeyCode.LeftShift))
         {
 
             if (currentDirection == PlayerDirection.left)
