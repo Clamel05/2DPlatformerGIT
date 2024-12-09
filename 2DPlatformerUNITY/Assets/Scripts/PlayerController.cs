@@ -35,12 +35,14 @@ public class PlayerController : MonoBehaviour
     public Vector2 groundCheckSize = new(0.4f, 0.1f);
     public LayerMask groundCheckMask;
 
-    [Header("Dash CheckR")]
+    //Initially had a check for collision on the left and right side of the player.
+    //I found it worked with just one box so I got rid of this
+    /*[Header("Dash CheckR")] 
     public float dashCheckOffsetR = 0.5f;
     public Vector2 dashCheckSizeR = new(0.5f, 1.0f);
-    public LayerMask dashCheckMaskR;
+    public LayerMask dashCheckMaskR;*/
 
-
+    //Variables for the overlap box to check isDashing
     [Header("Dash CheckL")]
     public float dashCheckOffsetL = 0.5f;
     public Vector2 dashCheckSizeL = new(0.5f, 1.0f);
@@ -48,8 +50,8 @@ public class PlayerController : MonoBehaviour
 
 
     [Header("Others")]
-    public float dashSpeedLeft = -10f;
-    public float dashSpeedRight = 10f;
+    public float dashSpeedLeft = -1000f; //Speed of the horizontal dash per second when facing left
+    public float dashSpeedRight = 1000f; //Speed of the horizontal dash per second when facing right
 
     private float accelerationRate;
     private float decelerationRate;
@@ -59,7 +61,7 @@ public class PlayerController : MonoBehaviour
 
     private bool isGrounded = false;
     public bool isDead = false;
-    private bool isDashing = false;
+    private bool isDashing = false;// Checks if the player is dashing
 
     private Vector2 velocity;
     private Vector2 playerInput;
@@ -195,20 +197,20 @@ public class PlayerController : MonoBehaviour
             if (currentDirection == PlayerDirection.left)
             {
                 body.constraints = RigidbodyConstraints2D.FreezePositionY;
-                velocity.x = dashSpeedLeft;
+                velocity.x = dashSpeedLeft * Time.deltaTime;
             }
 
             if (currentDirection == PlayerDirection.right)
             {
                 body.constraints = RigidbodyConstraints2D.FreezePositionY;
-                velocity.x = dashSpeedRight;
+                velocity.x = dashSpeedRight * Time.deltaTime;
             }
 
         }
         else if (isDashing)
         {
             isDashing = false;
-            body.constraints = RigidbodyConstraints2D.None;
+            body.constraints &= ~RigidbodyConstraints2D.FreezePositionY;
             body.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
 
