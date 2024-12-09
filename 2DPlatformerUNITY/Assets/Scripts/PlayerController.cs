@@ -90,8 +90,7 @@ public class PlayerController : MonoBehaviour
 
 
     public void FixedUpdate()
-    {
-        //d transform.Rotate(0, 0, 0);  
+    {  
         previousState = currentState;
 
         CheckForContact();
@@ -253,8 +252,6 @@ public class PlayerController : MonoBehaviour
             gravity -= 5 * Time.fixedDeltaTime;
             Debug.Log("Gravity" + gravity);
         }
-
-
 
     }
 
