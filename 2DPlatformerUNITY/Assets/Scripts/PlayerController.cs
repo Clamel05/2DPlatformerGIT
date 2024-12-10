@@ -185,7 +185,6 @@ public class PlayerController : MonoBehaviour
             initialJumpSpeed = 2 * apexHeight / apexTime;
             playerInput.y = 0;
         }
-
     }
 
     private void DashUpdate()
