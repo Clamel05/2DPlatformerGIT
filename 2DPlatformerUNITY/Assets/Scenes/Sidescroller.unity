@@ -1750,7 +1750,7 @@ MonoBehaviour:
   body: {fileID: 1433354316}
   currentState: 0
   previousState: 0
-  maxSpeed: 5
+  maxSpeed: 7
   accelerationTime: 0.25
   decelerationTime: 0.15
   apexHeight: 4.5
